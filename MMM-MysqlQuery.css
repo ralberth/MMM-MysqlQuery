@@ -1,0 +1,42 @@
+.mysqlQuery table {
+  border-collapse: collapse;
+  border-spacing: 2px 2px;
+  font-size: 14px;
+  line-height: 1em;
+}
+
+.mysqlQuery thead tr {
+  background: rgba(29, 80, 120, 0.9);
+}
+
+.mysqlQuery th {
+  padding: 10px 14px 10px 14px;
+  text-align: center;
+  color: #eee;
+}
+
+.mysqlQuery tbody tr:nth-child(even) {
+  background-color: rgba(50, 50, 50, 0.8);
+}
+
+.mysqlQuery tbody tr:nth-child(odd) {
+  background-color: rgba(90, 90, 90, 0.8);
+}
+
+.mysqlQuery td {
+  padding: 10px 14px 10px 14px;
+  text-align: left;
+  color: #ccc;
+}
+
+.mysqlQuery td.right {
+  text-align: right;
+}
+
+.mysqlQuery td.left {
+  text-align: left;
+}
+
+.mysqlQuery td.center {
+  text-align: center;
+}
