@@ -10,11 +10,43 @@
  */
 Module.register("MMM-MysqlQuery", {
 
-    defaults: {
-        hostname: "localhost",
-        port: 3306,
-        database: 'mysql',
-        intervalSeconds: 60 * 10
+    start: function() {
+        var me = this;
+        var c = this.config;
+        this.validate(c.query,               "query",               [ "notnull" ]);
+        this.validate(c.intervalSeconds,     "intervalSeconds",     [ "notnull", "positive" ]);
+        this.validate(c.emptyMessage,        "emptyMessage",        [ "notnull" ]);
+
+        this.validate(c.connection,          "connection",          [ "notnull" ]);
+        this.validate(c.connection.host,     "connection.host",     [ "notnull" ]);
+        this.validate(c.connection.port,     "connection.port",     [ "notnull", "positive" ]);
+        this.validate(c.connection.database, "connection.database", [ "notnull" ]);
+
+        this.validate(c.columns,             "columns",             [ "notnull" ]);
+        this.validate(c.columns.length,      "columns length",      [ "notnull", "positive" ]);
+        c.columns.forEach(function(col, indx) {
+            var realIndex = indx + 1; // so error messages show 1st as "1"
+            me.validate(col.name,       "columns[" + realIndex + "].name",       [ "notnull" ]);
+            me.validate(col.precision,  "columns[" + realIndex + "].precision",  [ "nonnegative" ]);
+        });
+    },
+
+
+    validate: function(val, name, tests) {
+        var me = this;
+        tests.forEach(function(test) {
+            switch(test) {
+            case "notnull":     me.assert(val,                        name + " cannot be null");          break;
+            case "notempty":    me.assert(!val || val.length,         name + " cannot be empty");         break;
+            case "positive":    me.assert(!val || parseInt(val) >= 1, name + " must be 1 or greater");    break;
+            case "nonnegative": me.assert(!val || parseInt(val) >= 0, name + " must be zero or greater"); break;
+            }
+        });
+    },
+
+
+    assert: function(test, msg) {
+        if (!test) throw new Error(msg);
     },
 
 
@@ -30,7 +62,7 @@ Module.register("MMM-MysqlQuery", {
         var tr = this.createEle(thead, "tr");
         var helper = this;
         this.config.columns.forEach(function(col) {
-            helper.createEle(tr, "th", null, col.title);
+            helper.createEle(tr, "th", null, col.title || col.name);
         });
         this.tbody = this.createEle(table, "tbody");
 
@@ -66,13 +98,8 @@ Module.register("MMM-MysqlQuery", {
     triggerHelper: function() {
         this.sendSocketNotification("MYSQLQUERY", {
             identifier: this.identifier,
-            host:       this.config.host,
-            port:       this.config.port,
-            user:       this.config.user,
-            password:   this.config.password,
-            database:   this.config.database,
-            query:      this.config.query,
-            columns:    this.config.columns
+            connection: this.config.connection,
+            query:      this.config.query
         });
     },
 
@@ -107,7 +134,12 @@ Module.register("MMM-MysqlQuery", {
                 var tr = helper.createEle(parent, "tr");
                 helper.config.columns.forEach(function(colDef) {
                     var displayVal = helper.formatCell(dbRow[colDef.name], colDef);
-                    helper.createEle(tr, "td", colDef.cssClassFormat, displayVal);
+                    var td = helper.createEle(tr, "td", colDef.cssClass);
+                    if (colDef.displayType == "html") {
+                        td.innerHTML = displayVal;
+                    } else {
+                        td.innerText = displayVal;
+                    }
                 });
             });
         } else {

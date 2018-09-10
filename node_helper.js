@@ -15,14 +15,7 @@ module.exports = NodeHelper.create({
     socketNotificationReceived: function(notification, payload) {
         var helper = this;
         if (notification === "MYSQLQUERY") {
-            var con = mysql.createConnection({
-                host: payload.host,
-                port: payload.port,
-                user: payload.user,
-                password: payload.password,
-                database: payload.database
-            });
-
+            var con = mysql.createConnection(payload.connection);
             con.connect(function(err) {
                 if (err) throw err;
                 con.query(payload.query, function(err, result) {

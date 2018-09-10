@@ -1,0 +1,36 @@
+{
+    "name": "MMM-MysqlQuery",
+    "version": "1.0.0",
+    "description": "MagicMirror module to display result of MySQL query",
+    "license": "MIT",
+    "main": "MMM-MysqlQuery.js",
+    "scripts": {
+        "test": "./node_modules/grunt/bin/grunt"
+    },
+    "author": "Rich Alberth",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ralberth/MMM-MysqlQuery"
+    },
+    "keywords": [
+        "MagicMirror",
+        "module",
+        "mysql"
+    ],
+    "dependencies": {
+        "mysql": "latest",
+        "npm": "^6.4.1"
+    },
+    "devDependencies": {
+        "grunt": "latest",
+        "grunt-eslint": "latest",
+        "grunt-jsonlint": "latest",
+        "grunt-markdownlint": "^1.0.13",
+        "grunt-stylelint": "latest",
+        "grunt-yamllint": "^0.3.0",
+        "stylelint": "^8.3.0",
+        "stylelint-config-standard": "latest",
+        "time-grunt": "latest",
+        "electron-rebuild": "^1.8.2"
+    }
+}
