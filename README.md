@@ -42,7 +42,7 @@ var config = {
         {
             module: 'MMM-MysqlQuery',
             config: {
-				 connection: {
+                connection: {
                     host: "server-status-info.blah.us-east-1.amazon.com",
                     port: 3306,
                     user: "joeshmoe",
@@ -72,7 +72,7 @@ var config = {
 
 
 | **Option** | **Type** | **Required?** | **Description** |
-| --- | --- | --- |
+| --- | --- | --- | --- |
 | `connection` | object | yes | Object with fields suitable for connecting to MySQL.  This entire object is passed to function `createConnection` in the Node.js "mysql" module.  The specific attributes recognized are documented at [www.npmjs.com/package/mysql](https://www.npmjs.com/package/mysql#connection-options).  The full docs of the library are at [www.npmjs.com/package/mysql](https://www.npmjs.com/package/mysql).  The items below in this table are a quick reference to the commonly-used keys so you don't have to jump to the other docs all the time. |
 | `connection.host` | string | yes | Full DNS hostname or IP address of the MySQL database |
 | `connection.port` | number | yes | Port MySQL is listening on (probably 3306) |
