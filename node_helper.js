@@ -12,9 +12,15 @@ var mysql = require("mysql");
 
 module.exports = NodeHelper.create({
 
+    debuglog: function(msg) {
+        //console.log("[DEBUG][MMM-MysqlQuery] " + msg);
+    },
+
+
     socketNotificationReceived: function(notification, payload) {
         var helper = this;
         if (notification === "MYSQLQUERY") {
+            this.debuglog("Received " + JSON.stringify(payload, null, 2));
             var con = mysql.createConnection(payload.connection);
             con.connect(function(err) {
                 if (err) throw err;
@@ -24,6 +30,7 @@ module.exports = NodeHelper.create({
                         identifier: payload.identifier,
                         rows: result
                     });
+                    helper.debuglog("Sending result: " + JSON.stringify(result, null, 2));
                 });
             });
         }

@@ -10,7 +10,12 @@
  */
 Module.register("MMM-MysqlQuery", {
 
+    debuglog: function(msg) {
+        //console.log("[DEBUG][MMM-MysqlQuery] " + msg);
+    },
+
     start: function() {
+        this.debuglog("Starting up");
         var me = this;
         var c = this.config;
         this.validate(c.query,               "query",               [ "notnull" ]);
@@ -88,6 +93,7 @@ Module.register("MMM-MysqlQuery", {
     notificationReceived: function(notification, payload, sender) {
         switch(notification) {
         case "DOM_OBJECTS_CREATED":
+            this.debuglog("Received notification " + notification + ", payload=" + payload + ", from " + sender);
             this.triggerHelper();
             this.startTimer();
             break;
@@ -96,6 +102,7 @@ Module.register("MMM-MysqlQuery", {
 
 
     triggerHelper: function() {
+        this.debuglog("Sending MYSQLQUERY id=" + this.identifier + ", query=" + this.config.query);
         this.sendSocketNotification("MYSQLQUERY", {
             identifier: this.identifier,
             connection: this.config.connection,
@@ -107,6 +114,7 @@ Module.register("MMM-MysqlQuery", {
     startTimer: function() {
         var self = this;
         if (! this.timer) {
+            this.debuglog("Start timer");
             this.timer = setInterval(
                 function() { self.triggerHelper(); },
                 self.config.intervalSeconds * 1000
@@ -127,13 +135,18 @@ Module.register("MMM-MysqlQuery", {
 
 
     replaceTableRows: function(parent, rowsToAdd) {
+        this.debuglog("Replacing table with new server results:");
         var helper = this;
         while (parent.firstChild) parent.removeChild(parent.firstChild);
         if (rowsToAdd && rowsToAdd.length) {
             rowsToAdd.forEach(function(dbRow) {
+                helper.debuglog("   Adding row to table: " + JSON.stringify(dbRow, null, 2));
                 var tr = helper.createEle(parent, "tr");
                 helper.config.columns.forEach(function(colDef) {
-                    var displayVal = helper.formatCell(dbRow[colDef.name], colDef);
+                    var rawVal = dbRow[colDef.name];
+                    var displayVal = helper.formatCell(rawVal, colDef);
+                    helper.debuglog("      Col " + colDef.name + ": raw value=\"" + rawVal +
+                                    "\", display value=\"" + displayVal + "\"");
                     var td = helper.createEle(tr, "td", colDef.cssClass);
                     if (colDef.displayType == "html") {
                         td.innerHTML = displayVal;
@@ -143,6 +156,7 @@ Module.register("MMM-MysqlQuery", {
                 });
             });
         } else {
+            this.debuglog("   No rows returned");
             if (helper.config.emptyMessage) {
                 var tr = helper.createEle(parent, "tr");
                 var td = helper.createEle(tr, "td");
@@ -206,6 +220,7 @@ Module.register("MMM-MysqlQuery", {
 
     suspend: function() {
         if (!!this.timer) {
+            this.debuglog("Suspending");
             clearInterval(this.timer);
             this.timer = null;
         }
@@ -215,5 +230,6 @@ Module.register("MMM-MysqlQuery", {
     resume: function() {
         this.triggerHelper();
         this.startTimer();
+        this.debuglog("Resuming");
     }
 });
