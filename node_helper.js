@@ -27,17 +27,22 @@ module.exports = NodeHelper.create({
                     con.destroy();
                     throw err;
                 }
+
                 con.query(payload.query, function(err, result) {
+                    helper.debuglog("Received from MySQL: " + JSON.stringify(result, null, 2));
+
                     if (err) {
                         con.destroy();
                         throw err;
                     }
+
+                    var arrayForBrowser = helper.flattenResultSets(result);
                     helper.sendSocketNotification("MYSQLQUERY_RESULT", {
                         identifier: payload.identifier,
-                        rows: result
+                        rows: arrayForBrowser
                     });
 
-                    helper.debuglog("Sending result: " + JSON.stringify(result, null, 2));
+                    helper.debuglog("Sending result: " + JSON.stringify(arrayForBrowser, null, 2));
                 });
             });
 
@@ -57,5 +62,36 @@ module.exports = NodeHelper.create({
                 con
             );
         }
+    },
+
+
+    /*
+     * Special case: if we received more than one result back, combine them
+     * together and emit as a single result set.  If there is a Summary returned
+     * at the end, strip it off (usually from a CALL invocation instead of a
+     * SELECT invocation).
+     *
+     * CALL emits an object that looks like this at the end of the results:
+     * { "fieldCount": 0, "affectedRows": 0, "insertId": 0, "serverStatus": 34, "warningCount": 1, "message": "",
+     *   "protocol41": true, "changedRows": 0 }
+     */
+    flattenResultSets: function(results) {
+        ret = []
+
+        for(var thing of results)
+            if (Array.isArray(thing))
+                ret = ret.concat(thing);
+            else if (! this.isSummaryObject(thing))
+                ret.push(thing);
+
+        return ret;
+    },
+
+
+    isSummaryObject: function(thing) {
+        return "fieldCount"   in thing &&
+               "affectedRows" in thing &&
+               "insertId"     in thing &&
+               "serverStatus" in thing; // close enough :-)
     }
 });
