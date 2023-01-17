@@ -7,6 +7,15 @@ A [MagicMirror²](https://magicmirror.builders) module to connect to a MySQL dat
 
 Each table refreshes on a schedule you set in the `config.js` file.
 
+## Prerequisite
+The module ``mysql`` must be installed. Sometimes this is already the case. So check:
+ ``find ~/MagicMirror/node_modules/ -name "mysql"``
+ If you get ``/home/<yourUserName>/MagicMirror/node_modules/mysql`` you are fine.
+ 
+ If not:
+ ``npm install mysql``
+ In case your machine (such as a Raspberry Pi) crashes on install for for instance due to a CPU overload (running Grafana Server, MagicMirror and other stuff at the same time) and the installation of mysql fails: Deleting deleting the hole node_modules directury and reinstalling might help: ``sudo rm -r ~/MagicMirror/node_modules/`` and then ``npm i`` ((from Stackoverflow))[https://stackoverflow.com/questions/18134411/cannot-find-module-mysql-node-js]
+ 
 
 ## Installation
 
