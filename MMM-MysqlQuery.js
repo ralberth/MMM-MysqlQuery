@@ -169,11 +169,11 @@ Module.register("MMM-MysqlQuery", {
 
     formatCell: function(value, cellConf) {
         if (value) {
-            if (cellConf.precision) {
+            if (cellConf.precision != null) {
                 value = value.toFixed(cellConf.precision);
             }
 
-            if (cellConf.thousandsSeparator) {
+            if (cellConf.thousandsSeparator != null) {
                 value = this.addSeparators(value, cellConf.thousandsSeparator);
             }
 
@@ -189,14 +189,14 @@ Module.register("MMM-MysqlQuery", {
                 break;
             }
 
-            if (cellConf.prefix) {
+            if (cellConf.prefix != null) {
                 value = cellConf.prefix + value;
             }
 
-            if (cellConf.suffix) {
+            if (cellConf.suffix != null) {
                 value = value + cellConf.suffix;
             }
-        } else if (cellConf.nullValue) {
+        } else if (cellConf.nullValue != null) {
             value = cellConf.nullValue;
         }
 
