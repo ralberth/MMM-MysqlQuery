@@ -1,5 +1,4 @@
 /* global module, require */
-/* jshint node: true, esversion: 6 */
 
 /* MagicMirror²
  * Node Helper: MMM-MysqlQuery
