@@ -16,8 +16,5 @@
     ],
     "dependencies": {
         "mysql": "latest"
-    },
-    "devDependencies": {
-        "mysql": "latest"
     }
 }
