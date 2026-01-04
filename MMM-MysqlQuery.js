@@ -2,7 +2,7 @@
 
 /* MMM-MysqlQuery.js
  *
- * Magic Mirror
+ * MagicMirror²
  * Module: MMM-MysqlQuery
  * MIT Licensed.
  *
