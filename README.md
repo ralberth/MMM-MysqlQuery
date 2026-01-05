@@ -21,7 +21,7 @@ cd ../..
 ```
 
 
-## Upgrade
+## Update
 
 If you already have a version of MMM-MysqlQuery, run the following to pick up new code changes:
 
@@ -37,8 +37,6 @@ npm install
 Edit your `config/config.js` file and add a new object to the `modules` array like any other module:
 
 ```js
-var config = {
-    modules: [
         {
             module: 'MMM-MysqlQuery',
             config: {
@@ -65,9 +63,7 @@ var config = {
                                         dateFormat: "datetime", dateLocale: "en-GB" }
                 ]
             }
-        }
-    ]
-}
+        },
 ```
 
 

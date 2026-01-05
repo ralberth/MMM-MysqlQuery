@@ -1,7 +1,6 @@
 /* global module, require */
-/* jshint node: true, esversion: 6 */
 
-/* Magic Mirror
+/* MagicMirror²
  * Node Helper: MMM-MysqlQuery
  * MIT Licensed.
  */

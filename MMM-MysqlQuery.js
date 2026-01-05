@@ -2,7 +2,7 @@
 
 /* MMM-MysqlQuery.js
  *
- * Magic Mirror
+ * MagicMirror²
  * Module: MMM-MysqlQuery
  * MIT Licensed.
  *
@@ -93,7 +93,7 @@ Module.register("MMM-MysqlQuery", {
     notificationReceived: function(notification, payload, sender) {
         switch(notification) {
         case "DOM_OBJECTS_CREATED":
-            this.debuglog("Received notification " + notification + ", payload=" + payload + ", from " + sender);
+            this.debuglog(`Received notification ${notification}, payload=${payload}, from ${sender}`);
             this.triggerHelper();
             this.startTimer();
             break;
@@ -102,7 +102,7 @@ Module.register("MMM-MysqlQuery", {
 
 
     triggerHelper: function() {
-        this.debuglog("Sending MYSQLQUERY id=" + this.identifier + ", query=" + this.config.query);
+        this.debuglog(`Sending MYSQLQUERY id=${this.identifier}, query=${this.config.query}`);
         this.sendSocketNotification("MYSQLQUERY", {
             identifier: this.identifier,
             connection: this.config.connection,
@@ -140,13 +140,12 @@ Module.register("MMM-MysqlQuery", {
         while (parent.firstChild) parent.removeChild(parent.firstChild);
         if (rowsToAdd && rowsToAdd.length) {
             rowsToAdd.forEach(function(dbRow) {
-                helper.debuglog("   Adding row to table: " + JSON.stringify(dbRow, null, 2));
+                helper.debuglog(`   Adding row to table: ${JSON.stringify(dbRow, null, 2)}`);
                 var tr = helper.createEle(parent, "tr");
                 helper.config.columns.forEach(function(colDef) {
                     var rawVal = dbRow[colDef.name];
                     var displayVal = helper.formatCell(rawVal, colDef);
-                    helper.debuglog("      Col " + colDef.name + ": raw value=\"" + rawVal +
-                                    "\", display value=\"" + displayVal + "\"");
+                    helper.debuglog(`      Col ${colDef.name}: raw value="${rawVal}", display value="${displayVal}"`);
                     var td = helper.createEle(tr, "td", colDef.cssClass);
                     if (colDef.displayType == "html") {
                         td.innerHTML = displayVal;
